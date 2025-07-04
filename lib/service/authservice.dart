@@ -11,7 +11,7 @@ class AuthService {
   // Auth state stream
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  // Sign in with email and password
+ 
   Future<UserCredential?> signInWithEmailAndPassword(
     String email,
     String password,
@@ -27,10 +27,10 @@ class AuthService {
     }
   }
 
-  // Sign in with Google
+
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      // Trigger Google Sign-In flow
+     
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         // User canceled the sign-in

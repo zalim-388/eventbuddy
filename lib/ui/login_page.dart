@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -56,10 +55,10 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       } on FirebaseAuthException catch (e) {
-        print("FirebaseAuthException: ${e.code} - ${e.message}");
+        print("FirebaseAuthException $e");
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("Login failed: ${e.message}")));
+        ).showSnackBar(SnackBar(content: Text("Login failed$e")));
       } catch (e) {
         print("Unexpected login error: $e");
         ScaffoldMessenger.of(
@@ -73,29 +72,29 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _signInWithGoogle() async {
-    setState(() => _isLoading = true);
+  // Future<void> _signInWithGoogle() async {
+  //   setState(() => _isLoading = true);
 
-    try {
-      final userCredential = await _authService.signInWithGoogle();
-      if (userCredential != null && mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Google sign-in failed: $e')));
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
+  //   try {
+  //     final userCredential = await _authService.signInWithGoogle();
+  //     if (userCredential != null && mounted) {
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => const HomePage()),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(
+  //         context,
+  //       ).showSnackBar(SnackBar(content: Text('Google sign-in failed: $e')));
+  //     }
+  //   } finally {
+  //     if (mounted) {
+  //       setState(() => _isLoading = false);
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -151,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20.h),
               GestureDetector(
-                onTap: _isLoading ? null : () => _loginUser(context),
+                // onTap: _isLoading ? null : () => _loginUser(context),
                 child: Container(
                   height: 50.h,
                   width: 343.w,
@@ -177,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20.h),
               GestureDetector(
-                onTap: _isLoading ? null : _signInWithGoogle,
+                onTap: () => _loginUser(context),
                 child: Container(
                   height: 50.h,
                   width: 343.w,
@@ -186,31 +185,31 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: const Color(0xFF6C63FF)),
                   ),
-                  alignment: Alignment.center,
-                  child:
-                      _isLoading
-                          ? const CircularProgressIndicator(
-                            color: Color(0xFF6C63FF),
-                            strokeWidth: 2,
-                          )
-                          : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(width: 10.w),
-                              Text(
-                                "Sign in with Google",
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: const Color(0xFF6C63FF),
-                                ),
-                              ),
-                            ],
-                          ),
+                  // alignment: Alignment.center,
+                  // child:
+                  //     _isLoading
+                  //         ? const CircularProgressIndicator(
+                  //           color: Color(0xFF6C63FF),
+                  //           strokeWidth: 2,
+                  //         )
+                  //         : Row(
+                  //           mainAxisAlignment: MainAxisAlignment.center,
+                  //           children: [
+                  //             SizedBox(width: 10.w),
+                  //             Text(
+                  //               "Sign in with Google",
+                  //               style: TextStyle(
+                  //                 fontSize: 16.sp,
+                  //                 color: const Color(0xFF6C63FF),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
                 ),
               ),
               SizedBox(height: 24.h),
               Padding(
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 50),
                 child: Text.rich(
                   TextSpan(
                     text: "Don't have an account? ",

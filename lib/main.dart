@@ -1,4 +1,5 @@
 import 'package:eventbuddy/firebase_options.dart';
+import 'package:eventbuddy/provider/evantprovider.dart';
 import 'package:eventbuddy/service/Authcontroller.dart';
 import 'package:eventbuddy/ui/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,7 +13,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthController())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthController()),
+
+         ChangeNotifierProvider(create: (_) => EventProvider()),
+      ],
       child: MyApp(),
     ),
   );

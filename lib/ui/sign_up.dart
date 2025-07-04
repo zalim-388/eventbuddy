@@ -39,9 +39,21 @@ class _SignUpState extends State<SignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 100.h),
-                Text(
-                  "sign up",
-                  style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
+                Row(
+                  children: [
+                    Text(
+                      "sign up",
+                      style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
+                    ),
+
+
+                  TextButton(onPressed: (){ Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+
+                  }, child: Text("Skip"))
+                  ],
                 ),
                 SizedBox(height: 50.h),
                 _TextField(
@@ -54,7 +66,7 @@ class _SignUpState extends State<SignUp> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10.h),
+
                 _TextField(
                   hint: "Email",
                   controller: emailController,
@@ -67,7 +79,7 @@ class _SignUpState extends State<SignUp> {
                     return null;
                   },
                 ),
-                SizedBox(height: 10.h),
+
                 Container(
                   height: 50.h,
                   width: 346.w,
@@ -105,7 +117,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-                SizedBox(height: 5.h),
+SizedBox(height: 10.h,),
                 _TextField(
                   hint: "Mobile",
                   controller: mobileController,
@@ -118,7 +130,7 @@ class _SignUpState extends State<SignUp> {
                     return null;
                   },
                 ),
-                SizedBox(height: 5.h),
+
                 _TextField(
                   hint: "password",
                   controller: passwordController,
@@ -172,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 SizedBox(height: 20.h),
                 Padding(
-                  padding: const EdgeInsets.only(left: 50),
+                  padding: const EdgeInsets.only(left: 100),
                   child: Text.rich(
                     TextSpan(
                       text: "Already have an account? ",

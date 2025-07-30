@@ -84,10 +84,10 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           emailController.text = user.email ?? "";
           passwordController.text = "";
-          // _isGoogleSignedIn = true;
+          _isGoogleSignedIn = true;
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) =>  HomePage()),
           );
         });
       }

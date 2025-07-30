@@ -1,10 +1,11 @@
 import 'package:eventbuddy/provider/evantprovider.dart';
+import 'package:eventbuddy/service/Authcontroller.dart';
 import 'package:eventbuddy/service/authservice.dart';
-import 'package:eventbuddy/ui/login_page.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:eventbuddy/utils/fontstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 // import 'event_provider.dart';
 // import 'event_model.dart';
 
@@ -22,50 +23,34 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            "",
+            Provider.of<AuthController>(context).username ?? 'Welcome',
             style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
           ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () async {
-                final shouldLogout = await showDialog<bool>(
-                  context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        title: const Text("Confirm Logout"),
-                        content: const Text("Are you sure you want to logout?"),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: const Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: const Text("Logout"),
-                          ),
-                        ],
-                      ),
-                );
+            // IconButton(
 
-                if (shouldLogout == true) {
-                  await _authService.signOut();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
-                }
-              },
-            ),
+            //   onPressed: () => provider.toggleSortBy(),
+            //   tooltip: "Sort by ${provider.sortBy == 'Date' ? 'Name' : 'Date'}",
+            // ),
+            IconButton(icon: Icon(Icons.logout), onPressed: () {
+          
+            }),
           ],
           bottom: TabBar(
+            dividerColor: Colors.transparent,
             isScrollable: true,
             labelColor: Colors.white,
-            unselectedLabelColor: Colors.grey,
+            unselectedLabelColor: Colors.black,
+            unselectedLabelStyle: fontStyle.heading.copyWith(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
             indicator: BoxDecoration(
               color: Color(0xFF6C63FF),
               borderRadius: BorderRadius.circular(8),
             ),
+            indicatorPadding: EdgeInsets.zero,
+            indicatorSize: TabBarIndicatorSize.tab,
             tabs:
                 [
                   'All',

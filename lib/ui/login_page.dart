@@ -20,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final AuthService _authService = AuthService();
   bool _isLoading = false;
+  bool _isGoogleLoading = false;
+  bool _isGoogleSignedIn = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _loginUser(BuildContext context) async {
@@ -72,29 +74,41 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Future<void> _signInWithGoogle() async {
-  //   setState(() => _isLoading = true);
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isGoogleLoading = true);
 
-  //   try {
-  //     final userCredential = await _authService.signInWithGoogle();
-  //     if (userCredential != null && mounted) {
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => const HomePage()),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(
-  //         context,
-  //       ).showSnackBar(SnackBar(content: Text('Google sign-in failed: $e')));
-  //     }
-  //   } finally {
-  //     if (mounted) {
-  //       setState(() => _isLoading = false);
-  //     }
-  //   }
-  // }
+    try {
+      final userCredential = await _authService.signInWithGoogle();
+      final user = userCredential?.user;
+      if (user != null && mounted) {
+        setState(() {
+          emailController.text = user.email ?? "";
+          passwordController.text = "";
+          // _isGoogleSignedIn = true;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        });
+      }
+
+      // if (userCredential != null && mounted) {
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const HomePage()),
+      //   );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Google sign-in failed: $e')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isGoogleLoading = false);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -119,125 +133,128 @@ class _LoginPageState extends State<LoginPage> {
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22),
-          child: Column(
-            children: [
-              SizedBox(height: 200.h),
-              _TextField(
-                hint: "Email",
-                controller: emailController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  } else if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Enter a valid email (e.g., example@domain.com)';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10.h),
-              _TextField(
-                hint: "Password",
-                controller: passwordController,
-                password: true,
-                validator: (value) {
-                  if (value == null || value.length < 6) {
-                    return 'Password must be at least 6 characters';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.h),
-              GestureDetector(
-                // onTap: _isLoading ? null : () => _loginUser(context),
-                child: Container(
-                  height: 50.h,
-                  width: 343.w,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF6C63FF),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  alignment: Alignment.center,
-                  child:
-                      _isLoading
-                          ? const CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          )
-                          : Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 16.sp,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 200.h),
+                _TextField(
+                  hint: "Email",
+                  controller: emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    } else if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Enter a valid email (e.g., example@domain.com)';
+                    }
+                    return null;
+                  },
+                  readonly: _isGoogleSignedIn,
+                ),
+                SizedBox(height: 10.h),
+                _TextField(
+                  hint: "Password",
+                  controller: passwordController,
+                  password: true,
+                  validator: (value) {
+                    if (value == null || value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20.h),
+                GestureDetector(
+                  onTap: _isLoading ? null : () => _loginUser(context),
+                  child: Container(
+                    height: 50.h,
+                    width: 343.w,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6C63FF),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    alignment: Alignment.center,
+                    child:
+                        _isLoading
+                            ? const CircularProgressIndicator(
                               color: Colors.white,
+                              strokeWidth: 2,
+                            )
+                            : Text(
+                              "Login",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              GestureDetector(
-                onTap: () => _loginUser(context),
-                child: Container(
-                  height: 50.h,
-                  width: 343.w,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFF6C63FF)),
                   ),
-                  // alignment: Alignment.center,
-                  // child:
-                  //     _isLoading
-                  //         ? const CircularProgressIndicator(
-                  //           color: Color(0xFF6C63FF),
-                  //           strokeWidth: 2,
-                  //         )
-                  //         : Row(
-                  //           mainAxisAlignment: MainAxisAlignment.center,
-                  //           children: [
-                  //             SizedBox(width: 10.w),
-                  //             Text(
-                  //               "Sign in with Google",
-                  //               style: TextStyle(
-                  //                 fontSize: 16.sp,
-                  //                 color: const Color(0xFF6C63FF),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
                 ),
-              ),
-              SizedBox(height: 24.h),
-              Padding(
-                padding: const EdgeInsets.only(left: 50),
-                child: Text.rich(
-                  TextSpan(
-                    text: "Don't have an account? ",
-                    style: fontStyle.body.copyWith(fontSize: 13),
-                    children: [
-                      TextSpan(
-                        text: "Sign Up",
-                        style: fontStyle.body.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                          color: const Color(0xFF6C63FF),
-                        ),
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const SignUp(),
+                SizedBox(height: 20.h),
+                GestureDetector(
+                  onTap: () => _signInWithGoogle(),
+                  child: Container(
+                    height: 50.h,
+                    width: 343.w,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFF6C63FF)),
+                    ),
+                    alignment: Alignment.center,
+                    child:
+                        _isGoogleLoading
+                            ? const CircularProgressIndicator(
+                              color: Color(0xFF6C63FF),
+                              strokeWidth: 2,
+                            )
+                            : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 10.w),
+                                Text(
+                                  "Sign in with Google",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    color: const Color(0xFF6C63FF),
                                   ),
-                                );
-                              },
-                      ),
-                    ],
+                                ),
+                              ],
+                            ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 24.h),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50),
+                  child: Text.rich(
+                    TextSpan(
+                      text: "Don't have an account? ",
+                      style: fontStyle.body.copyWith(fontSize: 13),
+                      children: [
+                        TextSpan(
+                          text: "Sign Up",
+                          style: fontStyle.body.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: const Color(0xFF6C63FF),
+                          ),
+                          recognizer:
+                              TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const SignUp(),
+                                    ),
+                                  );
+                                },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -252,6 +269,7 @@ Widget _TextField({
   IconData? icon,
   bool password = false,
   TextInputType keybordtype = TextInputType.text,
+  bool readonly = false,
 }) {
   return SizedBox(
     height: 70.h,

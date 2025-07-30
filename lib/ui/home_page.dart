@@ -1,8 +1,10 @@
 import 'package:eventbuddy/provider/evantprovider.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:eventbuddy/service/authservice.dart';
+import 'package:eventbuddy/ui/login_page.dart';
 import 'package:eventbuddy/utils/fontstyle.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 // import 'event_provider.dart';
 // import 'event_model.dart';
 
@@ -12,6 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EventProvider>(context);
+    final AuthService _authService = AuthService();
 
     return DefaultTabController(
       length: 5,
@@ -23,14 +26,37 @@ class HomePage extends StatelessWidget {
             style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
           ),
           actions: [
-            // IconButton(
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () async {
+                final shouldLogout = await showDialog<bool>(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text("Confirm Logout"),
+                        content: const Text("Are you sure you want to logout?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text("Logout"),
+                          ),
+                        ],
+                      ),
+                );
 
-            //   onPressed: () => provider.toggleSortBy(),
-            //   tooltip: "Sort by ${provider.sortBy == 'Date' ? 'Name' : 'Date'}",
-            // ),
-            IconButton(icon: Icon(Icons.logout), onPressed: () {
-          
-            }),
+                if (shouldLogout == true) {
+                  await _authService.signOut();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                }
+              },
+            ),
           ],
           bottom: TabBar(
             isScrollable: true,

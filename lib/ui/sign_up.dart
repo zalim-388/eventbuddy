@@ -43,16 +43,20 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     Text(
                       "sign up",
-                      style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
+                      style: fontStyle.heading.copyWith(
+                        color: Color(0xFF6C63FF),
+                      ),
                     ),
 
-
-                  TextButton(onPressed: (){ Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-
-                  }, child: Text("Skip"))
+                    // TextButton(
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(builder: (context) => HomePage()),
+                    //     );
+                    //   },
+                    //   child: Text("Skip"),
+                    // ),
                   ],
                 ),
                 SizedBox(height: 50.h),
@@ -117,7 +121,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                   ),
                 ),
-SizedBox(height: 10.h,),
+                SizedBox(height: 10.h),
                 _TextField(
                   hint: "Mobile",
                   controller: mobileController,
@@ -143,45 +147,44 @@ SizedBox(height: 10.h,),
                 ),
                 SizedBox(height: 30.h),
 
-                if (selectedCategory == null)
-                  GestureDetector(
-                    onTap: () async {
-                      if (_formKey.currentState!.validate() &&
-                          selectedCategory != null) {
-                        final success = await authController.registerUser(
-                          email: emailController.text.trim(),
-                          password: passwordController.text.trim(),
-                          username: usernameController.text.trim(),
-                          mobile: mobileController.text.trim(),
-                          category: selectedCategory!,
-                        );
+                GestureDetector(
+                  onTap: () async {
+                    if (_formKey.currentState!.validate() &&
+                        selectedCategory != null) {
+                      final success = await authController.registerUser(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                        username: usernameController.text.trim(),
+                        mobile: mobileController.text.trim(),
+                        category: selectedCategory!,
+                      );
 
-                        if (success) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        }
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Signup failed")),
+                      if (success) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
                         );
                       }
-                    },
-                    child: Container(
-                      height: 52.h,
-                      width: 343.w,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF6C63FF),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                      ),
+                    } else {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text("Signup failed")));
+                    }
+                  },
+                  child: Container(
+                    height: 52.h,
+                    width: 343.w,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF6C63FF),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
                     ),
                   ),
+                ),
                 SizedBox(height: 20.h),
                 Padding(
                   padding: const EdgeInsets.only(left: 100),

@@ -15,4 +15,4 @@ EventBuddy is a Flutter application that allows users to browse, filter, and dow
 These instructions will help you set up the project locally.
 
 ## 📦 Download APK  
-👉 [Download Listify App](https://drive.google.com/file/d/1L76NPQ6HQG2oYzCO1ljNZoBnXoL_LTSG/view?usp=sharing)
+👉 [Download EventBuddy App](https://drive.google.com/file/d/1L76NPQ6HQG2oYzCO1ljNZoBnXoL_LTSG/view?usp=sharing)

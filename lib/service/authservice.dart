@@ -27,7 +27,6 @@ class AuthService {
   Future<UserCredential?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
       if (googleUser == null) {
         return null;
       }
@@ -41,41 +40,13 @@ class AuthService {
       );
 
       return await _auth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      throw Exception('Firebase Auth error: ${e.message}');
     } catch (e) {
       throw Exception('Google sign-in failed: $e');
     }
   }
 
   Future<void> signOut() async {
-    try {
-      await Future.wait([_auth.signOut(), _googleSignIn.signOut()]);
-    } catch (e) {
-      throw Exception('Sign out failed: $e');
-    }
-  }
-
-  Future<UserCredential?> signUpWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
-    try {
-      final result = await _auth.createUserWithEmailAndPassword(
-        email: email.trim(),
-        password: password.trim(),
-      );
-      return result;
-    } catch (e) {
-      throw Exception('Sign up failed: $e');
-    }
-  }
-
-  Future<void> resetPassword(String email) async {
-    try {
-      await _auth.sendPasswordResetEmail(email: email.trim());
-    } catch (e) {
-      throw Exception('Password reset failed: $e');
-    }
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 }

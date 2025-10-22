@@ -1,10 +1,13 @@
 import 'package:eventbuddy/provider/evantprovider.dart';
 import 'package:eventbuddy/service/Authcontroller.dart';
-import 'package:eventbuddy/ui/sign_up.dart';
+import 'package:eventbuddy/service/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eventbuddy/utils/fontstyle.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'event_provider.dart';
+// import 'event_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -12,6 +15,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EventProvider>(context);
+    final AuthService _authService = AuthService();
 
     return DefaultTabController(
       length: 5,
@@ -23,18 +27,14 @@ class HomePage extends StatelessWidget {
             style: fontStyle.heading.copyWith(color: Color(0xFF6C63FF)),
           ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                Provider.of<AuthController>(context, listen: false).logout();
+            // IconButton(
 
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignUp()),
-                  (route) => false,
-                );
-              },
-            ),
+            //   onPressed: () => provider.toggleSortBy(),
+            //   tooltip: "Sort by ${provider.sortBy == 'Date' ? 'Name' : 'Date'}",
+            // ),
+            IconButton(icon: Icon(Icons.logout), onPressed: () {
+          
+            }),
           ],
           bottom: TabBar(
             dividerColor: Colors.transparent,

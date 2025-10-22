@@ -1,17 +1,18 @@
-# eventbuddy
 
-A new Flutter project.
+# EventBuddy
+
+EventBuddy is a Flutter application that allows users to browse, filter, and download events. Users can sign up or log in using Firebase Authentication, view a list of events by category (e.g., Sports, Tech), and download event resources directly to their device.
+
+## Features
+
+- **Firebase Authentication**: Secure sign up and login.
+- **Event Listing**: Browse events fetched from Firebase Firestore.
+- **Category Filtering**: Filter events by categories like Sports, Tech, Music, etc.
+- **Download Button**: Download event resources with a single tap.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+These instructions will help you set up the project locally.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"# eventbuddy" 
+## 📦 Download APK  
+👉 [Download Listify App](https://drive.google.com/file/d/1L76NPQ6HQG2oYzCO1ljNZoBnXoL_LTSG/view?usp=sharing)
